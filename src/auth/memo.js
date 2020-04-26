@@ -25,7 +25,7 @@ export function getPubKeys(private_key, memo) {
     const {from, to, nonce, check, encrypted} = memo
     const pubkey = private_key.toPublicKey().toString()
     const otherpub = pubkey === from.toString() ? to.toString() : from.toString()
-    return {pupkey, otherpub}
+    return {pubkey, otherpub}
 }
 
 /**
