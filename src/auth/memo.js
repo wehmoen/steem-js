@@ -7,6 +7,27 @@ import {ops} from './serializer'
 
 const encMemo = ops.encrypted_memo
 
+
+export function getPubKeys(private_key, memo) {
+    assert(memo, 'memo is required')
+    assert.equal(typeof memo, 'string', 'memo')
+    if(!/^#/.test(memo)) return memo
+    memo = memo.substring(1)
+
+    assert(private_key, 'private_key is required')
+    checkEncryption()
+
+    private_key = toPrivateObj(private_key)
+
+    memo = base58.decode(memo)
+    memo = encMemo.fromBuffer(new Buffer(memo, 'binary'))
+
+    const {from, to, nonce, check, encrypted} = memo
+    const pubkey = private_key.toPublicKey().toString()
+    const otherpub = pubkey === from.toString() ? to.toString() : from.toString()
+    return {pupkey, otherpub}
+}
+
 /**
     Some fields are only required if the memo is marked for decryption (starts with a hash).
     @arg {string|PrivateKey} private_key - WIF or PrivateKey object
